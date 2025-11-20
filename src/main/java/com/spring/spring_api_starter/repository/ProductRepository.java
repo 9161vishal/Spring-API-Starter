@@ -1,9 +1,11 @@
 package com.spring.spring_api_starter.repository;
 
-import org.springframework.data.repository.CrudRepository;
+import java.util.List;
+
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.spring.spring_api_starter.entity.Product;
 
-public interface ProductRepository extends CrudRepository<Product, Long> {
-
+public interface ProductRepository extends JpaRepository<Product, Long> {
+	List<Product> findByCategoryId(Byte categoryId);
 }

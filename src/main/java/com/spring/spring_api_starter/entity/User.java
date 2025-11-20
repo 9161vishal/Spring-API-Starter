@@ -29,9 +29,9 @@ public class User {
 	
 	@Column(name="password")
 	private String password;
-	
-	@OneToOne(mappedBy = "user",cascade = CascadeType.REMOVE)
-	private Profile profile;
+//	
+//	@OneToOne(mappedBy = "user",cascade = CascadeType.REMOVE)
+//	private Profile profile;
 	
 	@OneToMany(mappedBy = "user",cascade = CascadeType.ALL,orphanRemoval = true)
 	@Builder.Default

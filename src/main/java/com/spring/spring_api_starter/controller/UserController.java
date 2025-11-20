@@ -2,12 +2,15 @@ package com.spring.spring_api_starter.controller;
 
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.spring.spring_api_starter.dto.UserCustomizingJson;
@@ -34,10 +37,10 @@ public class UserController {
 
 
 	//  JUST A SIMPLE RESTFUL API TO RETURN ALL USERS JSON OBJECTS
-	@GetMapping
-	public Iterable<User> getAllUsers() {
-		return userRepository.findAll();
-	}
+//	@GetMapping
+//	public Iterable<User> getAllUsers() {//--------------> This APT cause JASON object cycle like User--->Address--->User----so on
+//		return userRepository.findAll();
+//	}
 
 
 //CREATING DYNAMIC ROUTES WHICH RETURN DATA BASED ON SOME INPUT LIKE USER ID
@@ -98,4 +101,21 @@ public class UserController {
 				.map(userCustomizingJsonMapper::toUserCustomizingJson)
 				.toList();
 	}
+	
+//  FETCHING USERS BY EXTRACTING QUERY PARAMENTERS              --------> when we hit this url without providing this query parameter cause error
+	@GetMapping("/search")//                                   |          for solving this error we make it not required or mandatory
+	public List<UserSummary> fetchingAllUsers(@RequestParam(required = false,defaultValue = "",name = "sort") String sortBy){
+		if(!Set.of("name","email").contains(sortBy)) sortBy="name"; //               |            |                     ^-------------------------------------                    
+		//                            |                                              |             ---> provide name Params(Key) = sort, in any condition if we change hare name | does not effect our result  
+		//                            |                                   For solving down problem set default empty string
+		//                            |                                              |
+		//                            |                                              v
+		//                             ----> this method also cause error if we not provide query parameter because by default sort initialize with null value 
+		//                                   thats why it throws null pointer exception
+		return userRepository.findAll(Sort.by(sortBy)).stream()
+				.map(userMapper::toUserDto)
+				.toList();
+	}
+	
+	
 }
