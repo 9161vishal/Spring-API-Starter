@@ -37,10 +37,10 @@ public class UserController {
 
 
 	//  JUST A SIMPLE RESTFUL API TO RETURN ALL USERS JSON OBJECTS
-//	@GetMapping
-//	public Iterable<User> getAllUsers() {//--------------> This APT cause JASON object cycle like User--->Address--->User----so on
-//		return userRepository.findAll();
-//	}
+	@GetMapping
+	public Iterable<User> getAllUsers() {//--------------> This APT cause JASON object cycle like User--->Address--->User----so on
+		return userRepository.findAll();
+	}
 
 
 //CREATING DYNAMIC ROUTES WHICH RETURN DATA BASED ON SOME INPUT LIKE USER ID
